@@ -13,9 +13,6 @@ def print_situation():
     print(player.location.desc)
     if player.location.chest[0]:
         print("This room has a chest")
-    if player.location.has_monsters():
-        print("This room has the following monsters:")
-        print(player.location.show_monsters())
     if player.location.has_items():
         print("This room has the following items:")
         print(player.location.show_items())
@@ -62,6 +59,13 @@ def create_world():
     mob = Mob("Goblin")
     b.add_monster(mob)
 
+def showHelp():
+    clear()
+    print("go <direction> -- moves you in the given direction")
+    print("inventory -- opens your inventory")
+    print("pickup <item> -- picks up the item")
+    print()
+    input("Press enter to continue...")
 
 create_world()
 playing = True
@@ -69,4 +73,27 @@ while playing:
     if player.location.monsters != []:
         battle(player, player.location.monsters)
     print_situation()
-    
+    while not commandSuccess:
+        commandSuccess = True
+        command = input("What now? ")
+        commandWords = command.split()
+        if commandWords[0].lower() == "go":   #cannot handle multi-word directions
+            player.goDirection(commandWords[1]) 
+        elif commandWords[0].lower() == "pickup":  #can handle multi-word objects
+            targetName = command[7:]
+            target = player.location.getItemByName(targetName)
+            if target != False:
+                player.pickup(target)
+            else:
+                print("No such item.")
+                commandSuccess = False
+        elif commandWords[0].lower() == "inventory":
+            player.showInventory()        
+        elif commandWords[0].lower() == "help":
+            showHelp()
+        elif commandWords[0].lower() == "exit":
+            playing = False
+        else:
+            print("Not a valid command")
+            commandSuccess = False
+
