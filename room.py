@@ -35,6 +35,11 @@ class Room:
             return False
         else:
             return True
+    def getItemByName(self, name):
+        for i in self.items:
+            if i.name.lower() == name.lower():
+                return i
+        return False
     def add_exit(self, room, dir):
         if dir == "south":
             self.south = room
