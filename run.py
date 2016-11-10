@@ -1,4 +1,4 @@
-from NodeRooms import Room
+from room import Room
 from combat import battle, Mob, Farmer, Weapon, Armor
 import item
 import os
