@@ -54,8 +54,13 @@ class Player(Character):
         return damage, crit
     
     def go_direction(self, dir):
-        
-        
+        valid=False
+        while not valid:
+            if self.location.dir.lower()[0]:
+                self.location=self.location.dir.lower()[0]
+                valid=True
+            else:
+                dir=input("You cannot go in that direction. Try again.\n")
 
 class Farmer(Player):
     def __init__(self):
