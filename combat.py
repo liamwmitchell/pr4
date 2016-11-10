@@ -19,6 +19,7 @@ class Character:
 
 class Player(Character):
     def __init__(self):
+        self.location=None
         self.STR=self.base_stats['STR']
         self.DEX=self.base_stats['DEX']
         self.CON=self.base_stats['CON']
@@ -51,6 +52,10 @@ class Player(Character):
         else:
             damage=self.equip['RH'].dmg[0] # indexes used here refer to min/max of weapon damage. need to spend some time reworking values
         return damage, crit
+    
+    def go_direction(self, dir):
+        
+        
 
 class Farmer(Player):
     def __init__(self):
