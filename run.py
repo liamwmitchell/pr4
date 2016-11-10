@@ -1,11 +1,13 @@
 from NodeRooms import Room
-from player import Player
+from combat import battle, Mob, Farmer, Weapon, Armor
 import item
 import os
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+player = Farmer()
+player.name = input("What is your name?")
 def print_situation():
     clear()
     print(player.location.desc)
@@ -56,3 +58,15 @@ def create_world():
     e.add_exit(f, "west")
     f.add_exit(g, "west")
     g.add_exit(b, "north")
+    player.location = a
+    mob = Mob("Goblin")
+    b.add_monster(mob)
+
+
+create_world()
+playing = True
+while playing:
+    if player.location.monsters != []:
+        battle(player, player.location.monsters)
+    print_situation()
+    
