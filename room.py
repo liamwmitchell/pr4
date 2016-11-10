@@ -42,25 +42,25 @@ class Room:
         return False
     def add_exit(self, room, dir):
         if dir == "south":
-            self.south = room
-            room.north = self
+            self.south[0] = room
+            room.north[0] = self
         if dir == "east":
-            self.east = room
-            room.west = self
+            self.east[0] = room
+            room.west[0] = self
         if dir == "north":
-            self.north = room
-            room.south = self
+            self.north[0] = room
+            room.south[0] = self
         if dir == "west":
-            self.west = room
-            room.east = self
+            self.west[0] = room
+            room.east[0] = self
     def show_exits(self):
-        if self.north:
+        if self.north[0]:
             print("north")
-        if self.west:
+        if self.west[0]:
             print("west")
-        if self.south:
+        if self.south[0]:
             print("south")
-        if self.east:
+        if self.east[0]:
             print("east")
     def has_chest(self):
         return(self.chest[0])
