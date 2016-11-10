@@ -1,6 +1,5 @@
 from room import Room
 from combat import battle, Mob, Farmer, Weapon, Armor
-import item
 import os
 
 def clear():
@@ -73,6 +72,7 @@ while playing:
     if player.location.monsters != []:
         battle(player, player.location.monsters)
     print_situation()
+    commandSuccess = False
     while not commandSuccess:
         commandSuccess = True
         command = input("What now? ")
