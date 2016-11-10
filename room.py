@@ -53,15 +53,17 @@ class Room:
         if dir == "west":
             self.west[0] = room
             room.east[0] = self
-    def show_exits(self):
+    def available_exits(self):
+        exits = []
         if self.north[0]:
-            print("north")
+            exits.append("north")
         if self.west[0]:
-            print("west")
+            exits.append("west")
         if self.south[0]:
-            print("south")
+            exits.append("south")
         if self.east[0]:
-            print("east")
+            exits.append("east")
+        return(exits)
     def has_chest(self):
         return(self.chest[0])
     def chest_contents(self):
