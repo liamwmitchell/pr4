@@ -1,5 +1,5 @@
 from room import Room
-from combat import battle, Mob, Farmer, Weapon, Armor
+from combat import battle, Character, Player, Item, Mob, Farmer, Weapon, Armor
 import os
 
 def clear():
@@ -70,7 +70,8 @@ create_world()
 playing = True
 while playing:
     if player.location.monsters != []:
-        battle(player, player.location.monsters)
+        player.refresh_derived()
+        battle([player], player.location.monsters)
     print_situation()
     commandSuccess = False
     while not commandSuccess:

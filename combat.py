@@ -54,10 +54,18 @@ class Player(Character):
         return damage, crit
     
     def go_direction(self, dir):
+        dir = dir.lower()
         valid=False
         while not valid:
-            if self.location.dir.lower()[0]:
-                self.location=self.location.dir.lower()[0]
+            if dir in self.location.available_exits():
+                if dir == "east":
+                    self.location = self.location.east[0]
+                if dir == "west":
+                    self.location = self.location.west[0]
+                if dir == "north":
+                    self.location = self.location.north[0]
+                if dir == "south":
+                    self.location = self.location.south[0]
                 valid=True
             else:
                 dir=input("You cannot go in that direction. Try again.\n")
@@ -132,11 +140,12 @@ def battle(party, mobs):
         for char in turn_order:
             if char in party:
                 print("---")
-                print("What is {}'s move?\n1. attack\n2. use skill\n3. use item\n".format(char.name), end="")
+                #print("What is {}'s move?\n1. attack\n2. use skill\n3. use item\n".format(char.name), end="")
+                print("What is {}'s move?\n1. attack".format(char.name), end="")
                 action=input("")
                 if '1' in action or 'a' in action:
                     attack_roll=char.basic_attack()
-                    target=g #temp
+                    target=mobs[0] #temp
                     if attack_roll[1]: #crit check
                         turn_in_round+=1
                         prev_round[str(turn_in_round)]={(char.name, target.name.lower()):"Critical hit! {} struck {} for " + str(attack_roll[0]) + " damage."}
@@ -160,7 +169,7 @@ def battle(party, mobs):
             elif char in mobs:
                 print(char)
                 attack_roll=char.basic_attack()
-                target=hero #temp
+                target=party[0] #temp
                 turn_in_round+=1
                 prev_round[str(turn_in_round)]={(char.name, target.name):"{} struck {} for " + str(attack_roll[0]) + " damage."}
                 target.HP-=attack_roll[0]
@@ -187,9 +196,9 @@ def battle(party, mobs):
     # possibly create self.alive attribute for all characters so that battle() can check through participants and
     # show list of dead at the end
 
-hero=Farmer()
-hero.name='Alex'
-hero.player=True
-hero.refresh_derived()
-g=Mob('Goblin')
-battle([hero],[g])
+##hero=Farmer()
+##hero.name='Alex'
+##hero.player=True
+##hero.refresh_derived()
+##g=Mob('Goblin')
+##battle([hero],[g])
