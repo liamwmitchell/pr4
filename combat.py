@@ -70,19 +70,63 @@ class Player(Character):
             else:
                 dir=input("You cannot go in that direction. Try again.\n")
 
+
+
 class Farmer(Player):
     def __init__(self):
-        self.base_stats={'DEX':5, 'STR':5, 'CON':5, 'LUC':5}
+        self.base_stats={'DEX':5, 'STR':5, 'CON':10, 'LUC':5}
         Player.__init__(self)
         self.equip={'RH':Weapon('pitchfork'), 'LH':None, 'armor':Armor('clothes'), 'trinket':None} #'LH' considered off-hand
         self.bag=[]
         self.gold=0
+
+    def pickup(self, item):
+        if item is Weapon:
+            oldweapon = self.equip['RH']
+            self.location.items.append(oldweapon)
+            self.equip['RH'] = item
+        else:
+            self.bag.append(item)
+
+    def show_inventory(self):
+        clear()
+        print("You are currently carrying:")
+        print()
+        weapon = self.equip['RH']
+        print(weapon.name)
+        if self.bag != []:
+            print("In your bag: ")
+            for i in self.bag:
+                print(i.name)
+        print()
+        input("Press enter to continue...")
+
+    def unlock_door(self, exit):
+        # checks if you have a key. If you do, it consumes the key and unlocks the locked door
+        def have_key():
+            for i in self.bag:
+                if i.name.lower() == 'key':
+                    return True
+            return False
+        def get_key():
+            for i in self.bag:
+                if i.name == 'key':
+                    return i
+        if have_key() == True:
+            k = get_key()
+            self.bag.remove(k)
+            self.location.exit[1] = False
+
 
     #def skill(self, mob):
 
 class Item:
     def __init__(self):
         pass
+
+class Key(Item):
+    def __init__(self):
+        self.name = "key"
 
 class Weapon(Item):
     def __init__(self, key):
@@ -98,7 +142,7 @@ class Armor(Item):
         self.wt=armors[key]['weight']
         self.rating=armors[key]['rating']
 
-weapons={'pitchfork':{'weight':3, 'damage':[1,4], 'two-handed':True, 'type':'stab'}} #planning on creating seperate.py for item library; can do same for mobs if necc
+weapons={'pitchfork':{'weight':3, 'damage':[1,4], 'two-handed':True, 'type':'stab'}, 'sword':{'weight':5, 'damage':[3,6], 'two-handed':True, 'type':'stab'}} #planning on creating seperate.py for item library; can do same for mobs if necc
 armors={'clothes':{'weight':0, 'rating':0}}
 mobs={'Goblin':{'HP':6, 'DMG':[2,3], 'AC':None, 'SPD':2, 'CRIT':0.03, 'drop':None}}
 

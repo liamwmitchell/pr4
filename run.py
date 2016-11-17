@@ -12,9 +12,11 @@ def print_situation():
     print(player.location.desc)
     if player.location.chest[0]:
         print("This room has a chest")
+        print()
     if player.location.has_items():
         print("This room has the following items:")
         print(player.location.show_items())
+        print()
     exits = ""
     if player.location.north[0]:
         exits = "north"
@@ -38,6 +40,7 @@ def print_situation():
         exits = exits + "\n"
     print("This room has exits to the")
     print(exits)
+    print()
 
 def create_world():
     a = Room("You are in room 1")
@@ -57,6 +60,10 @@ def create_world():
     player.location = a
     mob = Mob("Goblin")
     b.add_monster(mob)
+    sword = Weapon('sword')
+    d.add_item(sword)
+    mob2 = Mob("Goblin")
+    e.add_monster(mob2)
 
 def showHelp():
     clear()
@@ -85,11 +92,12 @@ while playing:
             target = player.location.getItemByName(targetName)
             if target != False:
                 player.pickup(target)
+                player.location.remove_item(target)
             else:
                 print("No such item.")
                 commandSuccess = False
         elif commandWords[0].lower() == "inventory":
-            player.showInventory()        
+            player.show_inventory()       
         elif commandWords[0].lower() == "help":
             showHelp()
         elif commandWords[0].lower() == "exit":

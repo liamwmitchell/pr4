@@ -20,14 +20,16 @@ class Room:
             return False
         else:
             return True
-    def lock_door(dir):
+    def lock_door(self, dir):
         ## Sets the 'locked' Boolean to True, which indicates that the door is locked
         dir[1] = True
+    def is_locked(self, dir):
+        return dir[1]
     def add_item(self, item):
         self.items.append(item)
     def remove_item(self, item):
         self.items.remove(item)
-    def show_items(self, item):
+    def show_items(self):
         for i in self.items:
             print(i.name)
     def has_items(self):
