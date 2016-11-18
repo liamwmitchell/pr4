@@ -1,5 +1,5 @@
 from room import Room
-from combat import battle, Character, Player, Item, Mob, Farmer, Weapon, Armor
+from combat import battle, Character, Player, Item, Mob, Farmer, Weapon, Armor, Key
 import os
 
 def clear():
@@ -50,6 +50,7 @@ def create_world():
     e = Room("You are in room 5")
     f = Room("You are in room 6")
     g = Room("You are in room 7")
+    h = Room("You are in room 8")
     a.add_exit(b, "east")
     b.add_exit(c, "east")
     c.add_exit(d, "east")
@@ -57,6 +58,7 @@ def create_world():
     e.add_exit(f, "west")
     f.add_exit(g, "west")
     g.add_exit(b, "north")
+    g.add_exit(h, "south")
     player.location = a
     mob = Mob("Goblin")
     b.add_monster(mob)
@@ -64,6 +66,9 @@ def create_world():
     d.add_item(sword)
     mob2 = Mob("Goblin")
     e.add_monster(mob2)
+    g.lock_door()
+    key = Key()
+    g.add_item(key)
 
 def showHelp():
     clear()
@@ -76,33 +81,43 @@ def showHelp():
 create_world()
 playing = True
 while playing:
-    if player.location.monsters != []:
-        player.refresh_derived()
-        battle([player], player.location.monsters)
-    print_situation()
-    commandSuccess = False
-    while not commandSuccess:
-        commandSuccess = True
-        command = input("What now? ")
-        commandWords = command.split()
-        if commandWords[0].lower() == "go":   #cannot handle multi-word directions
-            player.go_direction(commandWords[1]) 
-        elif commandWords[0].lower() == "pickup":  #can handle multi-word objects
-            targetName = command[7:]
-            target = player.location.getItemByName(targetName)
-            if target != False:
-                player.pickup(target)
-                player.location.remove_item(target)
-            else:
-                print("No such item.")
+    if player.location.desc == "You are in room 8":
+        clear()
+        print("You Win!")
+        input("Press enter to exit...")
+        playing = False
+    else:
+        if player.location.monsters != []:
+            player.refresh_derived()
+            battle([player], player.location.monsters)
+        print_situation()
+        commandSuccess = False
+        while not commandSuccess:
+            commandSuccess = True
+            command = input("What now? ")
+            commandWords = command.split()
+            if commandWords[0].lower() == "go":   #cannot handle multi-word directions
+                player.go_direction(commandWords[1]) 
+            elif commandWords[0].lower() == "pickup":  #can handle multi-word objects
+                targetName = command[7:]
+                target = player.location.getItemByName(targetName)
+                if target != False:
+                    player.pickup(target)
+                    player.location.remove_item(target)
+                else:
+                    print("No such item.")
+                    commandSuccess = False
+            elif commandWords[0].lower() == "unlock":
                 commandSuccess = False
-        elif commandWords[0].lower() == "inventory":
-            player.show_inventory()       
-        elif commandWords[0].lower() == "help":
-            showHelp()
-        elif commandWords[0].lower() == "exit":
-            playing = False
-        else:
-            print("Not a valid command")
-            commandSuccess = False
+                player.unlock_door()
+                print_situation()
+            elif commandWords[0].lower() == "inventory":
+                player.show_inventory()       
+            elif commandWords[0].lower() == "help":
+                showHelp()
+            elif commandWords[0].lower() == "exit":
+                playing = False
+            else:
+                print("Not a valid command")
+                commandSuccess = False
 

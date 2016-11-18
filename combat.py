@@ -58,13 +58,13 @@ class Player(Character):
         valid=False
         while not valid:
             if dir in self.location.available_exits():
-                if dir == "east":
+                if dir == "east" and self.location.east[1] == False:
                     self.location = self.location.east[0]
-                if dir == "west":
+                if dir == "west" and self.location.west[1] == False:
                     self.location = self.location.west[0]
-                if dir == "north":
+                if dir == "north" and self.location.north[1] == False:
                     self.location = self.location.north[0]
-                if dir == "south":
+                if dir == "south" and self.location.south[1] == False:
                     self.location = self.location.south[0]
                 valid=True
             else:
@@ -101,7 +101,7 @@ class Farmer(Player):
         print()
         input("Press enter to continue...")
 
-    def unlock_door(self, exit):
+    def unlock_door(self):
         # checks if you have a key. If you do, it consumes the key and unlocks the locked door
         def have_key():
             for i in self.bag:
@@ -115,7 +115,7 @@ class Farmer(Player):
         if have_key() == True:
             k = get_key()
             self.bag.remove(k)
-            self.location.exit[1] = False
+            self.location.south[1] = False
 
 
     #def skill(self, mob):
@@ -186,6 +186,7 @@ def battle(party, mobs):
                 print("---")
                 #print("What is {}'s move?\n1. attack\n2. use skill\n3. use item\n".format(char.name), end="")
                 print("What is {}'s move?\n1. attack".format(char.name), end="")
+                print()
                 action=input("")
                 if '1' in action or 'a' in action:
                     attack_roll=char.basic_attack()
@@ -197,7 +198,7 @@ def battle(party, mobs):
                         if target.HP<=0:
                             target.HP=0
                             mobs.remove(target)
-                            prev_round[str(turn_in_round)][(char.name, target.name)]+=" " + char.name + " has defeated " + target.name.lower() + "."
+                            prev_round[str(turn_in_round)][(char.name, target.name)] += " " + char.name + " has defeated " + target.name.lower() + "."
                     else: #standard
                         turn_in_round+=1
                         prev_round[str(turn_in_round)]={(char.name, target.name):"{} struck {} for " + str(attack_roll[0]) + " damage."}
